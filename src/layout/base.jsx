@@ -48,7 +48,7 @@ const Layout = () => {
         mode="inline"
         items={items}
       />
-      test
+      test 2
     </>
   );
 };
