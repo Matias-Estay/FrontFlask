@@ -1,33 +1,36 @@
 import axios from 'axios'
 import { useState } from 'react';
 import { Button, Modal, Spin, Progress, Space} from 'antd';
-
 const HomeChile = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [percent, setPercent] = useState(0)
-    const fetchData = async function (url){
-        let result = '';
-        const decoder = new TextDecoder();
-        const response = await fetch(url);
+    // const fetchData = async function (url){
+    //     let result = '';
+    //     const decoder = new TextDecoder();
+    //     const response = await fetch(url);
     
-        for await (const chunk of response.body){
-            result += decoder.decode(chunk, {stream:true});
-            const lines = result.split('\n');
-            result = lines.pop() || '';
+    //     for await (const chunk of response.body){
+    //         result += decoder.decode(chunk, {stream:true});
+    //         const lines = result.split('\n');
+    //         result = lines.pop() || '';
     
-            for(const line of lines){
-                //adding points one by one to D3 here
-                update([JSON.parse(line)]);
-            }
-        }
-    }
+    //         for(const line of lines){
+    //             //adding points one by one to D3 here
+    //             update([JSON.parse(line)]);
+    //         }
+    //     }
+    // }
     const showModal = () => {
         setPercent(0)
         axios({
             method: 'GET',
             url: '/api/Inicializar',
-            httpAgent: new http.Agent({ keepAlive: true }),
-            httpsAgent: new https.Agent({ keepAlive: true }),
+            timeout: 900000,
+            headers: { 
+                'Access-Control-Allow-Origin' : '*',
+                'Access-Control-Allow-Headers': 'POST, GET, PUT, DELETE, OPTIONS, HEAD, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Origin',
+                'Content-Type': 'application/json'
+              },
          }).then((res)=>{
             console.log(res)
             percent>100?setPercent(100):setPercent((percent) => percent + 2.18)
