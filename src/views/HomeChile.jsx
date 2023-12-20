@@ -1,81 +1,162 @@
 import axios from 'axios'
 import { useState } from 'react';
-import { Button, Modal, Spin, Progress, Space} from 'antd';
+import { Button, Row, Spin, Col, Card, Flex} from 'antd';
+import '../assets/css/cols.css'
+const { Meta } = Card;
 const HomeChile = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [percent, setPercent] = useState(0)
-    // const fetchData = async function (url){
-    //     let result = '';
-    //     const decoder = new TextDecoder();
-    //     const response = await fetch(url);
-    
-    //     for await (const chunk of response.body){
-    //         result += decoder.decode(chunk, {stream:true});
-    //         const lines = result.split('\n');
-    //         result = lines.pop() || '';
-    
-    //         for(const line of lines){
-    //             //adding points one by one to D3 here
-    //             update([JSON.parse(line)]);
-    //         }
-    //     }
-    // }
-    const showModal = () => {
-        setPercent(0)
+    const [loading_lider, setLoadingLider] = useState(false)
+    const [loading_santa, setLoadingSanta] = useState(false)
+    const [loading_jumbo, setLoadingJumbo] = useState(false)
+    const Generar_Archivo_LiderCH = () => {
+        setLoadingLider(true)
         axios({
             method: 'GET',
-            url: '/api/Inicializar',
+            url: '/api/LiderCH',
             timeout: 900000,
+            responseType: 'blob',
             headers: { 
                 'Access-Control-Allow-Origin' : '*',
                 'Access-Control-Allow-Headers': 'POST, GET, PUT, DELETE, OPTIONS, HEAD, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Origin',
                 'Content-Type': 'application/json'
               },
          }).then((res)=>{
-            console.log(res)
-            percent>100?setPercent(100):setPercent((percent) => percent + 2.18)
+            let url = window.URL.createObjectURL(res.data);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'LiderChile.xlsx';
+            a.click();
+            setLoadingLider(false)
+        }).catch((error)=>{
+            console.log(error)
+            setLoadingLider(false)
         })
-            // if(res.data=='<Response streamed [200 OK]>'){
-            //     percent>100?setPercent(100):setPercent((percent) => percent + 2.18)
-            
-        //     // res.blob().then(blob => {
-        //     //     let url = window.URL.createObjectURL(blob);
-        //     //     let a = document.createElement('a');
-        //     //     a.href = url;
-        //     //     a.download = 'LiderChile.xlsx';
-        //     //     a.click();
-        //     // });
-        //     // for(let i=0;i<urls.length;i++){
-        //     //     axios.post('http://192.168.100.92:8004/api/Lider',{url:urls[i].url,hoja:urls[i].hoja}).then((res)=>{
-        //     //         percent>100?setPercent(100):setPercent((percent) => percent + 2.18)           
-        //     //     }).catch(()=>{
-        //     //         percent>100?setPercent(100):setPercent((percent) => percent + 2.18)
-        //     //     })
-        //     // }
-        // })
-        setIsModalOpen(true);
     };
 
-    const handleOk = () => {
-        setIsModalOpen(false);
+    const Generar_Archivo_SantaCH = () => {
+        setLoadingSanta(true)
+        axios({
+            method: 'GET',
+            url: '/api/SantaCH',
+            timeout: 900000,
+            responseType: 'blob',
+            headers: { 
+                'Access-Control-Allow-Origin' : '*',
+                'Access-Control-Allow-Headers': 'POST, GET, PUT, DELETE, OPTIONS, HEAD, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Origin',
+                'Content-Type': 'application/json'
+              },
+         }).then((res)=>{
+            let url = window.URL.createObjectURL(res.data);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'SantaChile.xlsx';
+            a.click();
+            setLoadingSanta(false)
+        }).catch((error)=>{
+            console.log(error)
+            setLoadingSanta(false)
+        })
     };
-
-    const handleCancel = () => {
-     setIsModalOpen(false);
+    
+    const Generar_Archivo_JumboCH = () => {
+        setLoadingJumbo(true)
+        axios({
+            method: 'GET',
+            url: '/api/JumboCH',
+            timeout: 900000,
+            responseType: 'blob',
+            headers: { 
+                'Access-Control-Allow-Origin' : '*',
+                'Access-Control-Allow-Headers': 'POST, GET, PUT, DELETE, OPTIONS, HEAD, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Origin',
+                'Content-Type': 'application/json'
+              },
+         }).then((res)=>{
+            let url = window.URL.createObjectURL(res.data);
+            let a = document.createElement('a');
+            a.href = url;
+            a.download = 'JumboChile.xlsx';
+            a.click();
+            setLoadingJumbo(false)
+        }).catch((error)=>{
+            console.log(error)
+            setLoadingJumbo(false)
+        })
     };
 
     return (
-    <>
-        <Button type="primary" onClick={showModal}>
-            Generar documento de Lider
-        </Button>
-        <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
-            <Progress type="circle" percent={percent} />
-           <Space wrap>
-                <Spin type="circle"  tip="Generando archivo" size="large" />
-            </Space>
-        </Modal>
-    </>
+        <Row gutter={[0,26]} style={{overflow:'auto', textAlign:'-webkit-center', marginTop:'5%'}}>
+            <Col flex="1 0 33%">
+                <Card
+                    style={{width: 300}}
+                    cover={
+                    <img
+                        alt="example"
+                        src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                    />
+                    }
+                    actions={[
+                    <>
+                        <Button type="primary" onClick={Generar_Archivo_LiderCH}>
+                            Generar documento de Lider
+                        </Button>
+                        <Spin tip="Estamos generando tu archivo, por favor ten paciencia esto puede tardar varios minutos" spinning={loading_lider} fullscreen />
+                    </>
+                    ]}
+                    >
+                    <Meta
+                    title="Descarga de archivo"
+                    description="Texto descriptivo"
+                    />
+                </Card>  
+            </Col>
+            <Col flex="1 0 33%">
+                <Card
+                    style={{width: 300}}
+                    cover={
+                        <img
+                            alt="example"
+                            src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                        />
+                    }
+                    actions={[
+                    <>
+                        <Button type="primary" onClick={Generar_Archivo_SantaCH}>
+                            Generar documento de Santa Isabel
+                        </Button>
+                        <Spin tip="Estamos generando tu archivo, por favor ten paciencia esto puede tardar varios minutos" spinning={loading_santa} fullscreen />
+                    </>
+                    ]}
+                    >
+                    <Meta
+                    title="Descarga de archivo"
+                    description="Texto descriptivo"
+                    />
+                </Card>
+            </Col>
+            <Col flex="1 0 33%">
+                <Card
+                    style={{width: 300}}
+                    cover={
+                    <img
+                        alt="example"
+                        src="https://gw.alipayobjects.com/zos/rmsportal/JiqGstEfoWAOHiTxclqi.png"
+                    />
+                    }
+                    actions={[
+                    <>
+                        <Button type="primary" onClick={Generar_Archivo_JumboCH}>
+                            Generar documento de Jumbo
+                        </Button>
+                        <Spin tip="Estamos generando tu archivo, por favor ten paciencia esto puede tardar varios minutos" spinning={loading_jumbo} fullscreen />
+                    </>
+                    ]}
+                    >
+                    <Meta
+                    title="Descarga de archivo"
+                    description="Texto descriptivo"
+                    />
+                </Card>
+            </Col>
+        </Row>
     );
 }
 
